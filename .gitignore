@@ -1,0 +1,11 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Sphinx documentation
+docs/_build/
+
+# Vim swap files
+*.swp
+
+# Astropy helpers idk
+astropy_helpers/*
