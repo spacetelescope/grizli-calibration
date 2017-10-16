@@ -11,7 +11,7 @@ After creating ``beams``, the ``optimal_extract`` method provides the best extra
 of the grism data. 
 
 ``optimal_extract`` for Your Extraction Needs
-===========================================
+=============================================
     
 The following extracts the flux, wavelength, and error profile for a given grism data cutout::
 
