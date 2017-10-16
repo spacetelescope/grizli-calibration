@@ -81,7 +81,7 @@ copyright = '{0}, {1}'.format(
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 
-__import__('grizli')
+#__import__('grizli')
 package = 'grizli v0.3.0-22-g4b28039'
 
 # The short X.Y version.
