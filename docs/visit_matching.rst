@@ -103,7 +103,7 @@ and the following creates matches and preprocess ``G141`` and ``F140W``::
     info = grizli.utils.get_flt_info(files)
     
     # Here we'll sort for G141
-    grism == 'G141'
+    grism = 'G141'
     direct = 'F140W'
     
     # Collect in pairs
@@ -119,7 +119,7 @@ and the following creates matches and preprocess ``G141`` and ``F140W``::
         grism_visit = pair['grism']
 
         # Check that there are enough files
-        if (len(direct_visit['files']) => 3) and (len(grism_visit['files']) > 3):
+        if (len(direct_visit['files']) > 3) and (len(grism_visit['files']) > 3):
             process_direct_grism_visit(direct=direct_visit, grism=grism_visit, 
                                        align_mag_limits = [14,23])
 
