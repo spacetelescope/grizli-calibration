@@ -130,8 +130,8 @@
 \smallskip
 \noindent \large{\bf A}\footnotesize{\bf BSTRACT}
 
-\normalsize\noindent{\textit{We reduce 7 years of WFC3/IR calibration data on the two 
-standard stars GD-71 and GD-153 with the grism reduction software \texttt{grizli}. We compare the extracted spectra to preexisting data from the 
+\normalsize\noindent{\textit{We reduce grism calibration data on the two standard stars GD-71 and GD-153 with
+the grism reduction software \texttt{grizli}. We compare the extracted spectra to preexisting data from the 
 XShooter Spectral Library to estimate required throughput changes to the IR Grism configuration files. 
 We find required changes on the order of ... }}
 
@@ -193,7 +193,7 @@ used for GD-71 and GD-153 respectively.
 \makebox[\textwidth][c]{
 \begin{tabular}{|l|l|l|l|l|}
 \hline
-    Proposal & Visit & Exposures & Filters & Obs. Date  \\  
+    Proposal & Visit & Exposures per Visit & Filters & Observation Date  \\  
 \hline
     \rowcolor{gray} 11936 & 01 & 30 & F098M, F105W, G102                   & 2009-10-03 \\ 
                           & 02 & 30 & F160W, F140W, G141                   & 2009-09-21 \\ 
@@ -216,7 +216,7 @@ used for GD-71 and GD-153 respectively.
 \caption{\textsl{The above visits make up the body of data used for the GD-71 analysis. These
     exposures consist of grism observations (in G102 and G141) and the accompanying direct exposures
     in F105W or F098M for G102 and F140W and F160W for G141. The + indicates exposures with more filters were taken in the visit, but 
-    are not relevant to grism analysis. Note these visits and proposals consist of WFC3 grism calibration proposals.}}
+    are not relevant to grism analysis. Note these visits and proposals consist of WFC3 grism calibration proposals.}
 \label{tab:gd_71}
 \end{table}
 %tab%%%%-------------------------------------------------------%%%%%%
@@ -226,7 +226,7 @@ used for GD-71 and GD-153 respectively.
 \makebox[\textwidth][c]{
 \begin{tabular}{|l|l|l|l|l|}
 \hline
-    Proposal & Visit & Exposures & Filters & Obs. Date  \\  
+    Proposal & Visit & Exposures per Visit & Filters & Observation Date  \\  
 \hline
     \rowcolor{gray} 11552 & 01 & 9  & F098M, F105W, G102                   & 2009-09-09 \\ 
                           & 04 & 9  & F160W, F140W, G141                   & 2009-09-09 \\ 
@@ -251,18 +251,8 @@ used for GD-71 and GD-153 respectively.
 
 {\bf Grism Extraction with \texttt{grizli}}
 
-This set of 591 exposures was reduced using the grism reduction software \texttt{grizli}. The details of that
-extraction are documented in detail in a \texttt{grizli} cookbook available at (some readthedocs), but in 
-summary required:
-\begin{itemize}
-\item Matching visits by WCS orient and creating direct/grism filter pairs. 
-\item Preprocessing and drizzling the calibrated FLT files. 
-\item Creating a drizzled mosaic and a segmentation map of all of the data on each source. 
-\item Correcting the segmentation map for proper motion of the main source (as the data spans multiple epochs).
-\item Resetting Data Quality flags that flag out grism traces.
-\item Extracting beams and model comparisons. 
-\end{itemize}
-
+It is non-trivial to extract these punk grisms. 
+...
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                   Analysis
@@ -271,11 +261,7 @@ summary required:
 \ssectionstar{Analysis}
 \normalsize{
 
-    {\bf Flux Ratios ...}
-
 There are some flux profiles and sensitivity curves...
-    
-    {\bf Sensitivity Curves?} 
 
 }
 
@@ -283,9 +269,11 @@ There are some flux profiles and sensitivity curves...
 %                               Results
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ssectionstar{Throughput Updates to Configuration Files}
+\ssectionstar{Updates to Flux Extraction and Spectral Trace??}
 \normalsize{
 
+I'm honestly not sure at this point if our results will be -- THESE ARE OUR discrepancies
+or -- THESE ARE HOW WE FIXED THEM...
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
