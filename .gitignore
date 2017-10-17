@@ -7,5 +7,8 @@ docs/_build/
 # Vim swap files
 *.swp
 
-# Astropy helpers idk
-astropy_helpers/*
+# Weird busy files
+isr/images/._*
+.nfs*
+
+
