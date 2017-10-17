@@ -63,8 +63,8 @@ Then for the final group creation::
     ## -- RUN
     # Specify seg map and catalog.
     # (Named and created in the drizzling.)
-    seg = 'gd71-f105w_seg.fits'
-    cat = 'gd71-f105w.cat'
+    seg = 'gd71-f140w_seg.fits'
+    cat = 'gd71-f140w.cat'
 
     # Make the group
     grp = grizli.multifit.GroupFLT(grism_files=grism_files, sci_extn=1, 
@@ -223,10 +223,10 @@ Using spectra as a model requires renormalizing the spectra with ``pysynphot``::
     
     ## -- RUN
     # Direct filter
-    filt = 'f141w'
+    filt = 'f140w'
     
     # Renorm the object to the given filter
-    sp = S.Filespectrum('gd71-xshooter.dat')
+    sp = S.FileSpectrum('gd71-xshooter.dat')
     bp = S.ObsBandpass('wfc3,ir,' + filt)
     rn = sp.renorm(1, 'flam', bp)
     
