@@ -11,7 +11,7 @@
 .. warning::
     ``grizli`` is still in development. We'll try to keep on top of it, but times are changing.
     This extended example was conducted with `v0.3.0`. (Go check out the regular ``grizli`` docs
-    `here <http://grizli.readthedocs.io/en/master/>`_ .
+    `here <http://grizli.readthedocs.io/en/master/>`_ .)
 
 ``grizli`` Reduction with Minimal Tears
 =======================================
