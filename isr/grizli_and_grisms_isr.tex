@@ -40,6 +40,7 @@
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 \definecolor{lgray}{rgb}{0.9,0.9,0.9}
 
+
 % code settings
 \usepackage{listings}
 \lstset{frame=tb,
@@ -196,33 +197,32 @@ dithered across the field of view. The data spans 7 years of WFC3/IR grism calib
 591 individual exposures (303 for GD-71 and 282 for GD-153). Tables \ref{tab:gd_71} and \ref{tab:gd_153} list the proposals and visits
 used for GD-71 and GD-153 respectively. 
 
-
 %tab%%%%-------------------------------------------------------%%%%%%
 \begin{table}[h!]
 \makebox[\textwidth][c]{
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|l|l|}
 \hline
-    Proposal & Visit & Exposures & Filters & Obs. Date  \\  
+		Root & Proposal & Visit & PA $^\circ$ & Exposures & Filters & Obs. Date  \\  
 \hline
-    \rowcolor{gray} 11936 & 01 & 30 & F098M, F105W, G102                   & 2009-10-03 \\ 
-                          & 02 & 30 & F160W, F140W, G141                   & 2009-09-21 \\ 
-    \rowcolor{gray}       & 03 & 30 & F098M, F105W, G102                   & 2010-04-24 \\ 
-                          & 04 & 30 & F160W, F140W, G141                   & 2010-04-24 \\
-    \rowcolor{gray} 11926 & 04 & 5  & F140W, G141, +$^{*}$                 & 2009-10-05 \\
-                          & 05 & 5  & F140W, G141, +                       & 2010-02-16 \\
-    \rowcolor{gray}       & 06 & 5  & F140W, G141, +                       & 2010-02-16 \\
-                          & 29 & 5  & F140W, G141, +                       & 2009-11-01 \\
-    \rowcolor{gray}       & 30 & 5  & F140W, G141, +                       & 2009-11-25 \\
-                    12357 & 01 & 30 & F098M, F105W, G102                   & 2011-01-14 \\
-    \rowcolor{gray}       & 02 & 30 & F160W, F140W, G141                   & 2010-12-24 \\
-                    12333 & 14 & 14 & F098M, G102, F140W, G141             & 2010-11-17 \\
-    \rowcolor{gray} 12702 & 02 & 12 & F098M, F105W, G102, F160, F140, G141 & 2011-12-31 \\
-                    14024 & 01 & 36 & F098M, F105W, G102                   & 2015-01-02 \\
-    \rowcolor{gray}       & 02 & 36 & F160W, F140M, G141                   & 2015-02-08 \\
+\rowcolor{gray} ibbt & 11936 & 01 & 90.08  & 30 & F098M, F105W, G102                   & 2009-10-03 \\ 
+    		     &       & 02 & 89.22  & 30 & F160W, F140W, G141                   & 2009-09-21 \\ 
+\rowcolor{gray}      &       & 03 & 274.53 & 30 & F098M, F105W, G102                   & 2010-04-24 \\ 
+		     &       & 04 & 275.16 & 30 & F160W, F140W, G141                   & 2010-04-24 \\
+\rowcolor{gray} ibcf & 11926 & 04 & 91.08  & 5  & F140W, G141, +$^{*}$                 & 2009-10-05 \\
+		     &       & 05 & 90.56  & 5  & F140W, G141, +                       & 2010-02-16 \\
+\rowcolor{gray}      &       & 06 & 264.73 & 5  & F140W, G141, +                       & 2010-02-16 \\
+		     &       & 29 & 95.73  & 5  & F140W, G141, +                       & 2009-11-01 \\
+\rowcolor{gray}      &       & 30 & 104.62 & 5  & F140W, G141, +                       & 2009-11-25 \\
+		iblf & 12357 & 01 & 235.00 & 30 & F098M, F105W, G102                   & 2011-01-14 \\
+\rowcolor{gray}      &       & 02 & 209.57 & 30 & F160W, F140W, G141                   & 2010-12-24 \\
+		ibll & 12333 & 14 & 105.00 & 14 & F098M, G102, F140W, G141             & 2010-11-17 \\
+\rowcolor{gray} ibwq & 12702 & 02 & 235.00 & 12 & F098M, F105W, G102, F160, F140, G141 & 2011-12-31 \\
+		icqw & 14024 & 01 & 265.74 & 36 & F098M, F105W, G102                   & 2015-01-02 \\
+\rowcolor{gray}      &       & 02 & 265.74 & 36 & F160W, F140M, G141                   & 2015-02-08 \\
 \hline
 \end{tabular}
 } 
-\caption{\textsl{The above visits make up the body of data used for the GD-71 analysis. These
+\caption{\textsl{The above data (303 exposures) make up the body of data used for the GD-71 analysis. These
     exposures consist of grism observations (in G102 and G141) and the accompanying direct exposures
     in F105W or F098M for G102 and F140W and F160W for G141. The + indicates exposures with more filters were taken in the visit, but 
     are not relevant to grism analysis. Note these visits and proposals consist of WFC3 grism calibration proposals.}}
@@ -233,30 +233,46 @@ used for GD-71 and GD-153 respectively.
 %tab%%%%-------------------------------------------------------%%%%%%
 \begin{table}[h!]
 \makebox[\textwidth][c]{
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|l|l|}
 \hline
-    Proposal & Visit & Exposures & Filters & Obs. Date  \\  
-\hline
-    \rowcolor{gray} 11552 & 01 & 9  & F098M, F105W, G102                   & 2009-09-09 \\ 
-                          & 04 & 9  & F160W, F140W, G141                   & 2009-09-09 \\ 
-    \rowcolor{gray}       & A1 & 3  & F098M, F105W, G102                   & 2009-09-09 \\ 
-                          & A4 & 3  & F160W, F140W, G141                   & 2009-09-09 \\
-    \rowcolor{gray} 12702 & 1A & 48 & F098M, F105W, G102                   & 2012-06-23 \\
-                          & 1B & 42 & F160W, F140W, G141                   & 2012-05-18 \\
-    \rowcolor{gray}       & AA & 9  & F098M, F105W, G102, F160, F140, G141 & 2012-06-24 \\
-                          & AB & 3  & F160W, F140W, G141                   & 2012-05-18 \\
-    \rowcolor{gray} 13092 & 1A & 28 & F098M, F105W, G102, F160, F140, G141 & 2013-06-01 \\
-                    13579 & 01 & 28 & F098M, F105W, G102, F160, F140, G141 & 2014-06-24 \\
-    \rowcolor{gray}       & 02 & 28 & F098M, F105W, G102, F160, F140, G141 & 2014-07-05 \\
-                    14386 & 01 & 36 & F098M, G102, F140W, G141             & 2016-05-02 \\
-    \rowcolor{gray}       & 02 & 36 & F160W, F140W, G141                   & 2016-04-13 \\
+		Root & Proposal & Visit & PA $^\circ$ & Exposures & Filters & Obs. Date  \\  
+\rowcolor{gray} iab9 & 11552 & 01 & 277.04 & 9  & F098M, F105W, G102                   & 2009-09-09 \\ 
+		     &       & 04 & 276.20 & 9  & F160W, F140W, G141                   & 2009-09-09 \\ 
+\rowcolor{gray}      &	     & A1 & 291.37 & 3  & F098M, F105W, G102                   & 2009-09-09 \\ 
+		     &       & A4 & 291.36 & 3  & F160W, F140W, G141                   & 2009-09-09 \\
+\rowcolor{gray} ibwq & 12702 & 1A & 291.37 & 48 & F098M, F105W, G102                   & 2012-06-23 \\
+		     &       & 1B & 291.37 & 42 & F160W, F140W, G141                   & 2012-05-18 \\
+\rowcolor{gray}      &       & AA & 292.14 & 9  & F098M, F105W, G102, F160, F140, G141 & 2012-06-24 \\
+		     &       & AB & 292.15 & 3  & F160W, F140W, G141                   & 2012-05-18 \\
+\rowcolor{gray} ic46 & 13092 & 1A & 292.14 & 28 & F098M, F105W, G102, F160, F140, G141 & 2013-06-01 \\
+		ich4 & 13579 & 01 & 292.00 & 28 & F098M, F105W, G102, F160, F140, G141 & 2014-06-24 \\
+\rowcolor{gray}      &       & 02 & 292.00 & 28 & F098M, F105W, G102, F160, F140, G141 & 2014-07-05 \\
+		id2q & 14386 & 01 & 326.00 & 36 & F098M, G102, F140W, G141             & 2016-05-02 \\
+\rowcolor{gray}      &       & 02 & 346.24 & 36 & F160W, F140W, G141                   & 2016-04-13 \\
 \hline
 \end{tabular}
 } 
-    \caption{\textsl{The above visits make up the body of data used for the GD-153 analysis.}}
+\caption{\textsl{The above data (282 exposures) make up the body of data used for the GD-153 analysis.}}
 \label{tab:gd_153}
 \end{table}
 %tab%%%%-------------------------------------------------------%%%%%%
+
+The data on each calibrator was also dithered across the detector (and in some cases beyond)
+to provide a track on how (if at all) the extraction varied with detector position. Figure
+\ref{fig:detector_pos} shows the detector position (as calculated by \texttt{astropy.wcs}) 
+for the data on both calibrator stars. The position is also available in downloadable CSV
+files for each source, alongside the rootname and proposal id number (from somewhere TBD?).
+
+%fig%%%%-------------------------------------------------------%%%%%%
+\begin{figure}[h!]
+\makebox[\textwidth][c]{
+    \mbox{\includegraphics[width=.8\textwidth]{images/detector_position_compare.png}
+    }}
+	\caption{\textit{The detector position of the target source (GD-71 or GD-153 in blue and maroon
+	respectively) varies to test for extraction across the detector field.}}
+\label{fig:detector_pos}
+\end{figure}
+%fig%%%%-------------------------------------------------------%%%%%%
 
 {\bf Grism Extraction with \texttt{grizli}}
 
