@@ -134,8 +134,10 @@
 \normalsize\noindent{\textit{We reduce 7 years of WFC3/IR calibration data on the two 
 standard stars GD-71 and GD-153 with the grism reduction software \texttt{grizli}. 
 We compare the extracted spectra to preexisting spectroscopy data from the 
-X-Shooter Spectral Library (Chen et al, 2014) with ratios of flux profiles 
-with wavelength and sensitivity curves. We estimate required throughput changes to the IR Grism configuration files. 
+\textsc{X-Shooter Spectral Library} (Chen et al, 2014). We analyze ratios of flux profiles 
+with wavelength and sensitivity curves to compare with our configuration files
+and existing models, look for any calibration difference across detector area,
+and look at the calibration of higher order grism fringes.  
 We find required changes on the order of ... }}
 
 \smallskip
@@ -152,15 +154,17 @@ We find required changes on the order of ... }}
 \ssectionstar{Introduction}
 \normalsize{
 
-WFC3 (Wide Field Camera 3) has three grisms (spectral elements combining a grating and prism 
-to conduct slitless spectroscopy) for the UVIS and IR channels. For the IR grisms, filters 
+WFC3 (Wide Field Camera 3) of HST (Hubble Space Telescope) has three grisms (spectral elements combining a grating and prism 
+to conduct slitless spectroscopy) for the UVIS (UV and visual) and IR
+(infrared) channels. For the IR grisms, filters 
 G102 and G141, much work has gone into precisely calibrating their wavelength trace and throughput (Pirzkal et. al 2016). 
 Recently \texttt{grizli} -- an open source reduction software (Brammer?) was created to extract grism observations 
 and provide high quality WFC3/IR and JWST data. 
 
 For this project we extract WFC3/IR grism
 observations of GD-71 and GD-153 and compare the WFC3 slitless spectroscopy to the exisiting spectroscopy
-both from STIS (the Space Telescope Imaging Spectrograph) and the XShooter Spectral Library. We take care
+both from STIS (the Space Telescope Imaging Spectrograph) and the
+\textsc{X-Shooter Spectral Library}. We take care
 to not only examine the first order fringes of the grism used for the bulk of science data, but to also 
 extract second and negative first order grism fringes. (The distinction is shown in Figure \ref{fig:grism_orders}.)
 
@@ -193,7 +197,9 @@ extract second and negative first order grism fringes. (The distinction is shown
         \color{blue} GD-153} from the 
 Barbara Mikulski Archive for Space Telescopes (MAST); both queries are linked. Each set of 
 data includes grism exposures (G102 and G141) and corresponding direct exposures (F105, F098, and F140, F160), 
-dithered across the field of view. The data spans 7 years of WFC3/IR grism calibration proposals and consists of 
+dithered across the field of view. Grism observations are traditionally taken
+in these pairs so the direct image can be used to match the trace (or spatial
+extent) to the central source. The data spans 7 years of WFC3/IR grism calibration proposals and consists of 
 591 individual exposures (303 for GD-71 and 282 for GD-153). Tables \ref{tab:gd_71} and \ref{tab:gd_153} list the proposals and visits
 used for GD-71 and GD-153 respectively. 
 
@@ -257,19 +263,26 @@ used for GD-71 and GD-153 respectively.
 \end{table}
 %tab%%%%-------------------------------------------------------%%%%%%
 
-The data on each calibrator was also dithered across the detector (and in some cases beyond)
-to provide a track on how (if at all) the extraction varied with detector position. Figure
+The data on each calibrator was dithered across the detector
+to provide a track on how (if at all) the extraction varied with detector
+position (which has been true of the WFC3/UVIS grism, as described in Pirzkal et
+al. 2017). Figure
 \ref{fig:detector_pos} shows the detector position (as calculated by \texttt{astropy.wcs}) 
-for the data on both calibrator stars. The position is also available in downloadable CSV
-files for each source, alongside the rootname and proposal id number (from somewhere TBD?).
+for the grism observations of both calibrator stars. Downloadable CSV
+files that list the RA/DEC, detector position, rootname, proposal ID, and
+filter are available ... somewhere.
 
 %fig%%%%-------------------------------------------------------%%%%%%
 \begin{figure}[h!]
 \makebox[\textwidth][c]{
-    \mbox{\includegraphics[width=.8\textwidth]{images/detector_position_compare.png}
+    \mbox{\includegraphics[width=.8\textwidth]{images/dither_grism.png}
     }}
-	\caption{\textit{The detector position of the target source (GD-71 or GD-153 in blue and maroon
-	respectively) varies to test for extraction across the detector field.}}
+	\caption{\textit{The detector position of the target source (GD-71 or
+        GD-153 in blue and green respectively) taken by the grism. Note there
+        is little difference in the detector position between the two standard
+        stars. 
+        Most of the detector area is covered by the dithering and our results
+        show no detector position dependence.}}
 \label{fig:detector_pos}
 \end{figure}
 %fig%%%%-------------------------------------------------------%%%%%%
@@ -305,9 +318,11 @@ In summary, the grism extraction and analysis required :
 
 {\bf Products of Grism Extraction} 
 
-\texttt{grizli} utilizes \texttt{Astrodrizzle} to align grim data. For every direct filter we created drizzled mosaics
-of each dithered field, shown in Figure \ref{fig:mosaics}. These mosaics allow for the creation of segmentation maps
-with \texttt{SExtractor} as well as make any proper motion of the sources evident. 
+\texttt{grizli} utilizes \texttt{Astrodrizzle} to align mulitple direct
+observations within a grism data set into one mosaic image. For every direct filter we created drizzled mosaics
+of the entirety of each dithered field, shown in Figure \ref{fig:mosaics}. These mosaics allow for the creation 
+of segmentation maps (or images that isolate the position of source in the
+mosaic) with \texttt{SExtractor} and make any proper motion of the sources evident. 
 
 
 %fig%%%%-------------------------------------------------------%%%%%%
@@ -323,10 +338,12 @@ with \texttt{SExtractor} as well as make any proper motion of the sources eviden
 \end{figure}
 %fig%%%%-------------------------------------------------------%%%%%%
 
-We used \texttt{grizli} to create beam cutouts around each spectral order trace for the calibrator source. The
-beam cutouts allow for closer inspection of the match between the extraction and model and track if Data Quality flags
-have been artifically excluding grism data, as shown in Figure 
-\ref{fig:beam_trace}
+We used \texttt{grizli} to create cutouts around each fringe order (or beam) for the calibrator source. The
+beam cutouts allow for closer inspection of the match between the extraction
+and model. It is common for Data Quality flags (associated flags to track bad
+pixels, cosmic rays, etc) to accidentally flag grisms, and these beam cutouts
+make obvious if Data Quality flags have indeed artifically flagged out grism data, as shown in Figure 
+\ref{fig:beam_trace}.
 
 
 %fig%%%%-------------------------------------------------------%%%%%%
@@ -344,10 +361,13 @@ have been artifically excluding grism data, as shown in Figure
 
 {\bf Data from STIS and the X-Shooter Spectral Library}
 
+After extracting spectra from our grism observations, we needed a profile of
+our standard stars we could normalize to each grism filter.
 For comparison to existing spectroscopy, we compared the grism extraction to both STIS (Space Telescope Imaging Spectrograph) 
-archival calibration data and against data from the X-Shooter Spectral Library. We found better agreement with the X-Shooter
-Spectral Library (which is the newer data release?) and used that for our model comparisons moving forward. We renormalized
-the spectral data from X-Shooter to WFC3/IR bandpasses with the \texttt{Python} package \texttt{pysynphot}, as described in the
+archival calibration data and against data from the \textsc{X-Shooter Spectral
+Library}. We found better agreement with the \textsc{X-Shooter
+Spectral Library} (which is the newer data release?) and used that for our model comparisons moving forward. We renormalized
+the spectral data from \textsc{X-Shooter} to WFC3/IR bandpasses with the \texttt{Python} package \texttt{pysynphot}, as described in the
 \href{http://grizli-calibration.readthedocs.io/en/latest/objects_models_outputs.html#creating-next-level-models-with-multibeam}{
     \color{blue} modeling section} of the cookbook. 
 
