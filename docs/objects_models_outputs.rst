@@ -123,6 +123,12 @@ To make beam object::
 ``GroupFLT``, as well as the models of the grisms and contamination. This allows
 for some excellent initial testing. 
 
+.. warning::
+    For this plotting section -- the labels are created with ``LaTeX``. Certain
+    plotting calls within ``grizli`` will get quite turned around with
+    ``LaTex`` labels. If you plan to run ``process_direct_grism_visit`` again
+    -- remember to reset ``usetex=False``.
+
 To view the model and the beam cutout, and see how closely they match::
 
     ## -- IMPORTS
