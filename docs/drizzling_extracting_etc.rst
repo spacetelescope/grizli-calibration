@@ -93,6 +93,48 @@ One segmentation map ID absorbing the other is fairly trivial with ``astropy``::
 
 Checking by eye again to makes sure that the source is now a single object in the segmentation map.
 
+If you'd rather not do this manually, you can also set a pixel area around the
+coordinates of the target to your seg_id. (Note that you need to pick a seg_id
+already in the seg_map.) ::
+    ## -- IMPORTS
+    from astropy.io import fits
+    from astropy import wcs
+    import numpy as np
+
+    ## -- RUN
+    seg_map = 'split_seg_map.fits'
+       
+    # Open the seg map
+    with fits.open(seg_map) as hdu:
+        hdr = hdu[0].header
+        seg_dat = hdu[0].data
+            
+    # Convert the RA/DEC to pix
+    w = wcs.WCS(hdr)
+    ra, dec = hdr['RA_TARG'], hdr['DEC_TARG']
+    pix = w.wcs_world2pix([[ra,dec]], 1)
+    pix_ra, pix_dec = pix[0][0], pix[0][1]
+    
+    # Pick a seg_id within the region consumed
+    # A 100x100 px region seemed to compensate for any error in conversion
+    seg_id = np.max(seg_dat[int(pix_dec-100):int(pix_dec+100), int(pix_ra-100):int(pix_ra+100)])
+    
+    # Make sure there was a seg_id in that region
+    if seg_id > 0:
+        
+        # Update the seg map and save a backup of the old one
+        seg_dat[int(pix_dec-100):int(pix_dec+100), int(pix_ra-100):int(pix_ra+100)] = seg_id
+    
+        hdu.writeto('backup_' + seg_map, overwrite=True)
+        hdu[0].data = seg_dat
+        hdu.writeto(seg_map, overwrite=True)
+
+        print('A new 200x200 px seg id around the RA/DEC will be used.')
+    
+    else:
+        print('There was no seg_id in that region. Do it yourself.')
+
+
 Next is a brief exploration of the classes that make up ``grizli`` in :doc:`objects_models_outputs`.
 
 .. toctree::
