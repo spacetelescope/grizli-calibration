@@ -43,9 +43,6 @@ Notes
     This script can be interactive where it combines seg-id's. If so it will wait for
     a response while you check/edit your segmentation map. 
 
-    Grizli provides A LOT of output. Right now this gets written to a log file
-    so that what's printed to the screen is a little neater. 
-
 """
 
 ## -- IMPORTS
@@ -126,7 +123,7 @@ def main(path, data_name, spectrum='skip', dq_reset=True, interactive=False, fil
 
         # Correct seg map
         name = '{0}-{1}'.format(data_name, filt_in)
-        
+        print(name)
         source_id = fix_seg_map(name, interactive)
 
         # Initial one-to-one file matching
@@ -146,12 +143,14 @@ def main(path, data_name, spectrum='skip', dq_reset=True, interactive=False, fil
                 beams = add_models_and_beams(grp, source_id, beam_id, grism[index].lower(), spectrum=spectrum)
             
                 # Plotting
-                if not os.path.exists('plots'):
-                    os.makedirs('plots')
-                os.chdir('plots')
+                dir_name = 'plots_{}'.format(beam_id)
+                if not os.path.exists(dir_name):
+                    os.makedirs(dir_name)
+                os.chdir(dir_name)
                 plot_traces_and_beams(beams, name, beam_id)
-            
-            except ValueError: #IndexError) as e:
+                os.chdir('..')
+
+            except ValueError:
                 print('Looks like your observation is not going to support fringe order {}.'.format(beam_id))
         
 
@@ -222,9 +221,13 @@ def plot_traces_and_beams(beams, name, beam_id):
       #  ax.set_xlim(0.95, 1.75)
     
     fig.tight_layout(pad=0.5)
+    print('{0}-beam{1}-ratio.png'.format(name, beam_id))
     plt.savefig('{0}-beam{1}-ratio.png'.format(name, beam_id))
     print('Plot plotted.')
     plt.clf()
+    
+    # Set it back as to not mess up other outputs.
+    rc('text', usetex=False)
 
 def add_models_and_beams(grp, source_id, beam_id, grism_filt, spectrum):
     """ Add models and create beam cutouts.
@@ -257,10 +260,7 @@ def add_models_and_beams(grp, source_id, beam_id, grism_filt, spectrum):
 
     # Build beam objects 
     beams = grp.get_beams(source_id, size=24, beam_id=beam_id)
-    print('-----------------------------------------------------------')
-    print(beams)
-    print(len(beams))
-    print('-----------------------------------------------------------')
+    
     if spectrum=='skip':
         return beams
 
@@ -348,9 +348,9 @@ def direct_grism_matching(grism_filt):
         match = grizli.prep.find_direct_grism_pairs(pair['direct'], pair['grism'])
         direct_files.extend(list(match.keys()))
     
-        for direct in direct_files:
+        for direct_file in direct_files:
             try:
-                grism_files.extend(match[direct])
+                grism_files.extend(match[direct_file])
             except (IndexError, KeyError):
                 print('This grism: {} got a little turned around in the matching.'.format(pair['grism']['product']))
 
@@ -427,7 +427,36 @@ def fix_seg_map(name, interactive):
 
     seg_map = name + '_seg.fits'
     
-    if interactive == "True" or interactive == True:
+    if interactive == "False" or interactive == False:
+        # Open the seg map
+        with fits.open(seg_map) as hdu:
+            hdr = hdu[0].header
+            seg_dat = hdu[0].data
+        
+        # Convert the RA/DEC to pix
+        w = wcs.WCS(hdr)
+        ra, dec = hdr['RA_TARG'], hdr['DEC_TARG']
+        pix = w.wcs_world2pix([[ra,dec]], 1)
+        pix_ra, pix_dec = pix[0][0], pix[0][1]
+        
+        seg_id = np.max(seg_dat[int(pix_dec-100):int(pix_dec+100), int(pix_ra-100):int(pix_ra+100)])
+        if seg_id > 0:
+            seg_dat[int(pix_dec-100):int(pix_dec+100), int(pix_ra-100):int(pix_ra+100)] = seg_id
+         
+            #hdu.writeto('backup_' + seg_map, overwrite=True)
+            hdu[0].data = seg_dat
+            hdu.writeto(seg_map, overwrite=True)
+
+            print('A new 200x200 px seg id around the RA/DEC will be used.')
+        
+        else:
+            # If there were no sources in that region, obvi it needs to be run
+            # interactively.
+            print('Something went awry with our automatic seg finder. Please edit the seg map yourself...')
+            fix_seg_map(name, True)
+
+    else: 
+        
         # Check if we need to fix up the seg map.
         print('Please take a moment to take a peep at the segmentation map written to: ' + seg_map)
         single_source = str(input('Does the seg map require reformatting for the source you intend to extract? [y/n] \n'))
@@ -447,29 +476,6 @@ def fix_seg_map(name, interactive):
             print('Looks like the input is off. Try again? \n')
             fix_seg_map(name, interactive)
             return 
-    
-    else: 
-        
-        # Open the seg map
-        with fits.open(seg_map) as hdu:
-            hdr = hdu[0].header
-            seg_dat = hdu[0].data
-        
-        # Convert the RA/DEC to pix
-        w = wcs.WCS(hdr)
-        ra, dec = hdr['RA_TARG'], hdr['DEC_TARG']
-        pix = w.wcs_world2pix([[ra,dec]], 1)
-        pix_ra, pix_dec = pix[0][0], pix[0][1]
-        
-        seg_id = np.max(seg_dat)*2
-        new_id = np.ones((200,200))*seg_id
-        seg_dat[int(pix_dec-100):int(pix_dec+100), int(pix_ra-100):int(pix_ra+100)] = new_id
-         
-        #hdu.writeto('backup_' + seg_map, overwrite=True)
-        hdu[0].data = seg_dat
-        hdu.writeto(seg_map, overwrite=True)
-
-        print('A new 200x200 px seg id around the RA/DEC will be used.')
         print('The old seg map was saved to: backup_' + seg_map)
     
     return seg_id
@@ -551,7 +557,7 @@ def parse_args():
     return args
 
 
-def preprocess(path, direct, grism):
+def preprocess(path, direct_filt, grism_filt):
     """ Preprocesses data for a given set of "raw" grism
     data.
 
@@ -559,9 +565,9 @@ def preprocess(path, direct, grism):
     ----------
     path: str
         Path to the "raw" data files.
-    direct : str
+    direct_filt : str
         The direct filter to check.
-    grism : str
+    grism_filt : str
         The grism filter to check.
     """
 
@@ -570,10 +576,10 @@ def preprocess(path, direct, grism):
     info = grizli.utils.get_flt_info(files)
     
     # Match visits
-    color_filter = (info['FILTER'] == direct) | (info['FILTER'] == grism)
+    color_filter = (info['FILTER'] == direct_filt) | (info['FILTER'] == grism_filt)
      
     grism_visits, filters = grizli.utils.parse_flt_files(info=info[color_filter], uniquename=True, get_footprint=True)
-    safe_visits = remove_conflicting_visits(grism_visits, direct, grism)
+    safe_visits = remove_conflicting_visits(grism_visits, direct_filt, grism_filt)
     grism_matches = grizli.utils.parse_grism_associations(safe_visits)
 
     for pair in grism_matches:
@@ -583,8 +589,8 @@ def preprocess(path, direct, grism):
         # Run the preprocessing
         if (len(direct_visit['files']) > 3) and (len(grism_visit['files']) > 3):
             process_direct_grism_visit(direct=direct_visit, grism=grism_visit, align_mag_limits=[14,23])
-    
-    print('Files for: ' + grism + '/' + direct + ' have been processed.')
+            plt.clf() 
+    print('Files for: ' + grism_filt + '/' + direct_filt + ' have been processed.')
 
 
 def remove_conflicting_visits(visits, direct_filt, grism_filt):
@@ -626,15 +632,6 @@ def remove_conflicting_visits(visits, direct_filt, grism_filt):
 
 ## -- RUN
 if __name__ == "__main__":
-
-#    args = sys.argv
-#    dq_reset = True
-#    path = sys.argv[1]
-#    if args > 2:
-#        dq_reset = eval(sys.argv[2])
-#    path, data_name, spectrum, dq_reset, filt = args[1:] 
-    path ='/grp/hst/wfc3t/jfowler/bright_objects/gd-153-analysis/RAW/'
-    data_name = 'gd-153'
 
     args = parse_args()
     main(args.path, args.data_name, spectrum=args.spectrum, dq_reset=args.dq_reset, interactive=args.interactive, filt=args.filt)
